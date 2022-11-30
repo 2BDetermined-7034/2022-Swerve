@@ -42,8 +42,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     m_autoSelector = new SendableChooser<>();
-    m_autoSelector.addOption("test", SimpleAuto.getAuto(m_drivetrainSubsystem));
-
+    m_autoSelector.setDefaultOption("test auto", SimpleAuto.getAuto(m_drivetrainSubsystem));
 
 
     m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
