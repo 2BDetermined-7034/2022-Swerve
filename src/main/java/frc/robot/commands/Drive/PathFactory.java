@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class PathFactory {
     SwerveDrive m_swerveDrive;
-    private Command followTrajectoryCommand;
+    private final Command followTrajectoryCommand;
     public PathFactory(SwerveDrive drive, PathPlannerTrajectory path, HashMap<String, Command> eventMap, boolean isFirstPath) {
 
         m_swerveDrive = drive;

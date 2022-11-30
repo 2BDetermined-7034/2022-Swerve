@@ -17,11 +17,17 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 public final class Constants {
 
     public static final class DriveBase {
+        public static final double MAX_VOLTAGE = 12.0;
+
         public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.5779;//0.71;
         public static final double DRIVETRAIN_WHEELBASE_METERS = 0.5779;
-        public static final double xRateLimit = 0.1;
-        public static final double yRateLimit = 0.1;
-        public static final double rotRateLimit = 0.1;
+
+        public static final double xRateLimit = 2;
+        public static final double yRateLimit = 2;
+        public static final double rotRateLimit = 2;
+
+        public static final int driveCurrentLimit = 30;
+        public static final int rotCurrentLimit = 25;
     }
 
     public static final class Auto {

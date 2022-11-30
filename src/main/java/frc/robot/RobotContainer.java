@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.Auto.SimpleAuto;
@@ -49,9 +48,9 @@ public class RobotContainer {
 
     m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
             m_drivetrainSubsystem,
-            () -> -modifyAxis(m_yspeedLimiter.calculate(m_controller.getLeftY()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND),
-            () -> -modifyAxis(m_xspeedLimiter.calculate(m_controller.getLeftX()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND),
-            () -> -modifyAxis(m_rotspeedLimiter.calculate(m_controller.getRightX() / 2) * SwerveDrive.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND)
+            () -> -square(modifyAxis(m_yspeedLimiter.calculate(m_controller.getLeftY()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND)),
+            () -> -square(modifyAxis(m_xspeedLimiter.calculate(m_controller.getLeftX()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND)),
+            () -> -square(modifyAxis(m_rotspeedLimiter.calculate(m_controller.getRightX() / 2) * SwerveDrive.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND))
     ));
 
 
@@ -94,6 +93,10 @@ public class RobotContainer {
     value = Math.copySign(value * value, value);
 
     return value;
+  }
+
+  private static double square(double value) {
+    return Math.copySign(value * value, value);
   }
 
 

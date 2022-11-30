@@ -32,8 +32,6 @@ import static frc.robot.Constants.Modules.*;
 
 public class SwerveDrive extends SubsystemBase {
 
-    public static final double MAX_VOLTAGE = 12.0;
-
     public static final double MAX_VELOCITY_METERS_PER_SECOND = 5880 / 60.0 *
             SdsModuleConfigurations.MK4I_L2.getDriveReduction() *
             SdsModuleConfigurations.MK4I_L2.getWheelDiameter() * Math.PI;
@@ -58,13 +56,14 @@ public class SwerveDrive extends SubsystemBase {
 
     private final Field2d m_field = new Field2d();
     private final SwerveDrivePoseEstimator m_estimator;
+
     SwerveModuleState[] m_states;
     ChassisSpeeds m_speeds;
 
     public SwerveDrive() {
         Mk4ModuleConfiguration configuration = new Mk4ModuleConfiguration();
-        configuration.setDriveCurrentLimit(30);
-        configuration.setSteerCurrentLimit(25);
+        configuration.setDriveCurrentLimit(driveCurrentLimit);
+        configuration.setSteerCurrentLimit(rotCurrentLimit);
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
@@ -108,6 +107,7 @@ public class SwerveDrive extends SubsystemBase {
                 BACK_RIGHT_MODULE_STEER_ENCODER,
                 BACK_RIGHT_MODULE_STEER_OFFSET
         );
+
         m_estimator = new SwerveDrivePoseEstimator(getGyroscopeRotation(), new Pose2d(), getKinematics(),
                 VecBuilder.fill(0.02, 0.02, 0.01), // estimator values (x, y, rotation) std-devs
                 VecBuilder.fill(0.01), // Gyroscope rotation std-dev
@@ -115,6 +115,7 @@ public class SwerveDrive extends SubsystemBase {
 
         m_states = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0));
         tab.add("Field", m_field).withSize(4,2).withPosition(4, 0);
+
         tab.addNumber("Odometry X", () -> getPosition().getX()).withPosition(0, 5);
         tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 5);
         tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 5);
@@ -188,6 +189,7 @@ public class SwerveDrive extends SubsystemBase {
 
         m_estimator.update(getGyroscopeRotation(), m_states[0], m_states[1],
                 m_states[2], m_states[3]);
+
         m_field.setRobotPose(getPosition());
 
         m_frontLeftModule.set(m_states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, m_states[0].angle.getRadians());
