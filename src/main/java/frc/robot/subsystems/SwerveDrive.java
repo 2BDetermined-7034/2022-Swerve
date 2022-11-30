@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.swervedrivespecialties.swervelib.Mk4ModuleConfiguration;
 import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.swervedrivespecialties.swervelib.SwerveModule;
@@ -61,13 +62,15 @@ public class SwerveDrive extends SubsystemBase {
     ChassisSpeeds m_speeds;
 
     public SwerveDrive() {
-        //Mk4ModuleConfiguration configuration = new Mk4ModuleConfiguration();
-        //configuration.setDriveCurrentLimit(30);
-        //configuration.setSteerCurrentLimit(25);
+        Mk4ModuleConfiguration configuration = new Mk4ModuleConfiguration();
+        configuration.setDriveCurrentLimit(30);
+        configuration.setSteerCurrentLimit(25);
+
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
         m_frontLeftModule = Mk4iSwerveModuleHelper.createNeo(
                 tab.getLayout("Front Left Module", BuiltInLayouts.kList).withSize(1, 3).withPosition(0, 0),
+                configuration,
                 Mk4iSwerveModuleHelper.GearRatio.L2,
                 FRONT_LEFT_MODULE_DRIVE_MOTOR,
                 FRONT_LEFT_MODULE_STEER_MOTOR,
@@ -78,6 +81,7 @@ public class SwerveDrive extends SubsystemBase {
         // We will do the same for the other modules
         m_frontRightModule = Mk4iSwerveModuleHelper.createNeo(
                 tab.getLayout("Front Right Module", BuiltInLayouts.kList).withSize(1, 3).withPosition(1, 0),
+                configuration,
                 Mk4iSwerveModuleHelper.GearRatio.L2,
                 FRONT_RIGHT_MODULE_DRIVE_MOTOR,
                 FRONT_RIGHT_MODULE_STEER_MOTOR,
@@ -87,6 +91,7 @@ public class SwerveDrive extends SubsystemBase {
 
         m_backLeftModule = Mk4iSwerveModuleHelper.createNeo(
                 tab.getLayout("Back Left Module", BuiltInLayouts.kList).withSize(1, 3).withPosition(2, 0),
+                configuration,
                 Mk4iSwerveModuleHelper.GearRatio.L2,
                 BACK_LEFT_MODULE_DRIVE_MOTOR,
                 BACK_LEFT_MODULE_STEER_MOTOR,
@@ -96,6 +101,7 @@ public class SwerveDrive extends SubsystemBase {
 
         m_backRightModule = Mk4iSwerveModuleHelper.createNeo(
                 tab.getLayout("Back Right Module", BuiltInLayouts.kList).withSize(1, 3).withPosition(3, 0),
+                configuration,
                 Mk4iSwerveModuleHelper.GearRatio.L2,
                 BACK_RIGHT_MODULE_DRIVE_MOTOR,
                 BACK_RIGHT_MODULE_STEER_MOTOR,
@@ -107,12 +113,12 @@ public class SwerveDrive extends SubsystemBase {
                 VecBuilder.fill(0.01), // Gyroscope rotation std-dev
                 VecBuilder.fill(0.1, 0.1, 0.01)); // Vision (x, y, rotation) std-devs
 
-       m_states = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0));
+        m_states = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0));
         tab.add("Field", m_field).withSize(4,2).withPosition(4, 0);
-        tab.addNumber("Odometry X", () -> getPosition().getX());
-        tab.addNumber("Odometry Y", () -> getPosition().getY());
-        tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees());
-        tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees());
+        tab.addNumber("Odometry X", () -> getPosition().getX()).withPosition(0, 5);
+        tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 5);
+        tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 5);
+        tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 5);
     }
 
     public void setPosition(Pose2d m_position) {
@@ -179,9 +185,11 @@ public class SwerveDrive extends SubsystemBase {
     @Override
     public void periodic() {
         SwerveDriveKinematics.desaturateWheelSpeeds(m_states, MAX_VELOCITY_METERS_PER_SECOND);
+
         m_estimator.update(getGyroscopeRotation(), m_states[0], m_states[1],
                 m_states[2], m_states[3]);
         m_field.setRobotPose(getPosition());
+
         m_frontLeftModule.set(m_states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, m_states[0].angle.getRadians());
         m_frontRightModule.set(m_states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, m_states[1].angle.getRadians());
         m_backLeftModule.set(m_states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, m_states[2].angle.getRadians());

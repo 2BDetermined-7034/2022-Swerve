@@ -19,7 +19,6 @@ public class PathFactory {
         m_swerveDrive = drive;
         m_swerveDrive.addPath(path.toString(), path);
 
-
         followTrajectoryCommand = new SequentialCommandGroup(
                 new InstantCommand(() -> {
                     // Reset odometry for the first path you run during auto
