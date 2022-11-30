@@ -144,10 +144,6 @@ public class SwerveDrive extends SubsystemBase {
 
     public ChassisSpeeds getVelocity() {return m_speeds;}
 
-    public double getMaxAngularVelocity(){
-        return MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
-    }
-
     public double getMaxVelocityMetersPerSecond(){
         return MAX_VELOCITY_METERS_PER_SECOND;
     }

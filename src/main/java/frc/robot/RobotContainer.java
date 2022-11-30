@@ -18,12 +18,6 @@ import frc.robot.commands.Drive.DefaultDriveCommand;
 import frc.robot.subsystems.*;
 
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
 public class RobotContainer {
   ShuffleboardTab tab = Shuffleboard.getTab("Match");
   private final SwerveDrive m_drivetrainSubsystem = new SwerveDrive();
@@ -36,14 +30,9 @@ public class RobotContainer {
   SlewRateLimiter m_rotspeedLimiter = new SlewRateLimiter(Constants.DriveBase.rotRateLimit);
 
 
-
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
   public RobotContainer() {
     m_autoSelector = new SendableChooser<>();
     m_autoSelector.setDefaultOption("test auto", SimpleAuto.getAuto(m_drivetrainSubsystem));
-
 
     m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
             m_drivetrainSubsystem,
@@ -53,22 +42,16 @@ public class RobotContainer {
     ));
 
 
-
     tab.add("Auto", m_autoSelector);
-    // Configure the button bindings
     configureButtonBindings();
   }
 
-
   private void configureButtonBindings() {
-    // Back button zeros the gyroscope
     new Button(m_controller::getBackButton).whenPressed(m_drivetrainSubsystem::zeroGyroscope);
 
   }
 
-
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
     return m_autoSelector.getSelected();
   }
 
@@ -87,16 +70,12 @@ public class RobotContainer {
   private static double modifyAxis(double value) {
     // Deadband
     value = deadband(value, 0.075);
-
     // Square the axis
     value = Math.copySign(value * value, value);
-
     return value;
   }
 
   private static double square(double value) {
     return Math.copySign(value * value, value);
   }
-
-
 }
