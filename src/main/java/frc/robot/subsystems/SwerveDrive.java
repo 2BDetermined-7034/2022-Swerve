@@ -77,7 +77,6 @@ public class SwerveDrive extends SubsystemBase {
                 FRONT_LEFT_MODULE_STEER_OFFSET
         );
 
-        // We will do the same for the other modules
         m_frontRightModule = Mk4iSwerveModuleHelper.createNeo(
                 tab.getLayout("Front Right Module", BuiltInLayouts.kList).withSize(1, 3).withPosition(1, 0),
                 configuration,
