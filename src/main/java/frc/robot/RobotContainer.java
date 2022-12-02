@@ -19,63 +19,63 @@ import frc.robot.subsystems.*;
 
 
 public class RobotContainer {
-  ShuffleboardTab tab = Shuffleboard.getTab("Match");
-  private final SwerveDrive m_drivetrainSubsystem = new SwerveDrive();
-  SendableChooser<Command> m_autoSelector;
+    ShuffleboardTab tab = Shuffleboard.getTab("Match");
+    private final SwerveDrive m_drivetrainSubsystem = new SwerveDrive();
+    SendableChooser<Command> m_autoSelector;
 
-  // Controllers
-  private final XboxController m_controller = new XboxController(0);
-  SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(Constants.DriveBase.xRateLimit);
-  SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(Constants.DriveBase.yRateLimit);
-  SlewRateLimiter m_rotspeedLimiter = new SlewRateLimiter(Constants.DriveBase.rotRateLimit);
-
-
-  public RobotContainer() {
-    m_autoSelector = new SendableChooser<>();
-    m_autoSelector.setDefaultOption("test auto", SimpleAuto.getAuto(m_drivetrainSubsystem));
-
-    m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
-            m_drivetrainSubsystem,
-            () -> -square(modifyAxis(m_yspeedLimiter.calculate(m_controller.getLeftY()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND)),
-            () -> -square(modifyAxis(m_xspeedLimiter.calculate(m_controller.getLeftX()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND)),
-            () -> -square(modifyAxis(m_rotspeedLimiter.calculate(m_controller.getRightX() / 2) * SwerveDrive.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND))
-    ));
+    // Controllers
+    private final XboxController m_controller = new XboxController(0);
+    SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(Constants.DriveBase.xRateLimit);
+    SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(Constants.DriveBase.yRateLimit);
+    SlewRateLimiter m_rotspeedLimiter = new SlewRateLimiter(Constants.DriveBase.rotRateLimit);
 
 
-    tab.add("Auto", m_autoSelector);
-    configureButtonBindings();
-  }
+    public RobotContainer() {
+        m_autoSelector = new SendableChooser<>();
+        m_autoSelector.setDefaultOption("test auto", SimpleAuto.getAuto(m_drivetrainSubsystem));
 
-  private void configureButtonBindings() {
-    new Button(m_controller::getBackButton).whenPressed(m_drivetrainSubsystem::zeroGyroscope);
+        m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
+                m_drivetrainSubsystem,
+                () -> -square(modifyAxis(m_yspeedLimiter.calculate(m_controller.getLeftY()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND)),
+                () -> -square(modifyAxis(m_xspeedLimiter.calculate(m_controller.getLeftX()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND)),
+                () -> -square(modifyAxis(m_rotspeedLimiter.calculate(m_controller.getRightX() / 2) * SwerveDrive.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND))
+        ));
 
-  }
 
-  public Command getAutonomousCommand() {
-    return m_autoSelector.getSelected();
-  }
-
-  private static double deadband(double value, double deadband) {
-    if (Math.abs(value) > deadband) {
-      if (value > 0.0) {
-        return (value - deadband) / (1.0 - deadband);
-      } else {
-        return (value + deadband) / (1.0 - deadband);
-      }
-    } else {
-      return 0.0;
+        tab.add("Auto", m_autoSelector);
+        configureButtonBindings();
     }
-  }
 
-  private static double modifyAxis(double value) {
-    // Deadband
-    value = deadband(value, 0.075);
-    // Square the axis
-    value = Math.copySign(value * value, value);
-    return value;
-  }
+    private void configureButtonBindings() {
+        new Button(m_controller::getBackButton).whenPressed(m_drivetrainSubsystem::zeroGyroscope);
 
-  private static double square(double value) {
-    return Math.copySign(value * value, value);
-  }
+    }
+
+    public Command getAutonomousCommand() {
+        return m_autoSelector.getSelected();
+    }
+
+    private static double deadband(double value, double deadband) {
+        if (Math.abs(value) > deadband) {
+            if (value > 0.0) {
+                return (value - deadband) / (1.0 - deadband);
+            } else {
+                return (value + deadband) / (1.0 - deadband);
+            }
+        } else {
+            return 0.0;
+        }
+    }
+
+    private static double modifyAxis(double value) {
+        // Deadband
+        value = deadband(value, 0.075);
+        // Square the axis
+        value = Math.copySign(value * value, value);
+        return value;
+    }
+
+    private static double square(double value) {
+        return Math.copySign(value * value, value);
+    }
 }
