@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-
 public final class Constants {
 
     public static final class DriveBase {
@@ -50,6 +48,10 @@ public final class Constants {
         public static final double kV = 2.64;
         public static final double kA = 0.38134;
         public static final double kP = 0; //3.4557;
+    }
+
+    public static final class Camera {
+        public static final String camName = "idk";
     }
 
 }

@@ -25,8 +25,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-
 import static frc.robot.Constants.DriveBase.*;
 import static frc.robot.Constants.Modules.*;
 
@@ -183,8 +181,15 @@ public class SwerveDrive extends SubsystemBase {
     public void periodic() {
         SwerveDriveKinematics.desaturateWheelSpeeds(m_states, MAX_VELOCITY_METERS_PER_SECOND);
 
+
+
         m_estimator.update(getGyroscopeRotation(), m_states[0], m_states[1],
                 m_states[2], m_states[3]);
+        if(Vision.getHasTargets()) {
+            Vision.update(this);
+        }
+        
+        
 
         m_field.setRobotPose(getPosition());
 
