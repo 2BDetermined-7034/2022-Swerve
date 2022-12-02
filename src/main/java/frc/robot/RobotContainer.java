@@ -33,12 +33,15 @@ public class RobotContainer {
   public RobotContainer() {
     m_autoSelector = new SendableChooser<>();
     m_autoSelector.setDefaultOption("test auto", SimpleAuto.getAuto(m_drivetrainSubsystem));
+    m_autoSelector.addOption("spin auto", SimpleAuto.getSpinAuto(m_drivetrainSubsystem));
+    m_autoSelector.addOption("square auto", SimpleAuto.getSquareAuto(m_drivetrainSubsystem));
+
 
     m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
             m_drivetrainSubsystem,
-            () -> -square(modifyAxis(m_yspeedLimiter.calculate(m_controller.getLeftY()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND)),
-            () -> -square(modifyAxis(m_xspeedLimiter.calculate(m_controller.getLeftX()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND)),
-            () -> -square(modifyAxis(m_rotspeedLimiter.calculate(m_controller.getRightX() / 2) * SwerveDrive.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND))
+            () -> -square(modifyAxis(m_controller.getLeftY()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND),
+            () -> -square(modifyAxis(m_controller.getLeftX()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND),
+            () -> -square(modifyAxis(m_controller.getRightX()) * SwerveDrive.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND)
     ));
 
 

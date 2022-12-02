@@ -1,0 +1,99 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 0.9382935630479344,
+        "y": 3.0005846234970384
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.101387673393619,
+        "y": 3.0005846234970384
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "waitTime": 0
+    },
+    {
+      "anchorPoint": {
+        "x": 4.0,
+        "y": 3.0
+      },
+      "prevControl": {
+        "x": 4.0,
+        "y": 2.883070120091208
+      },
+      "nextControl": {
+        "x": 4.0,
+        "y": 3.1575445050409328
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "waitTime": 0
+    },
+    {
+      "anchorPoint": {
+        "x": 4.0,
+        "y": 6.0
+      },
+      "prevControl": {
+        "x": 4.007295425517217,
+        "y": 2.883297928116047
+      },
+      "nextControl": {
+        "x": 3.9999692144826158,
+        "y": 6.013151979358751
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "waitTime": 0
+    },
+    {
+      "anchorPoint": {
+        "x": 1.0,
+        "y": 6.0
+      },
+      "prevControl": {
+        "x": 1.0293216738452478,
+        "y": 6.040264812121074
+      },
+      "nextControl": {
+        "x": 0.9706783261547522,
+        "y": 5.959735187878926
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "waitTime": 0
+    },
+    {
+      "anchorPoint": {
+        "x": 1.0,
+        "y": 3.0
+      },
+      "prevControl": {
+        "x": 0.9969369107384305,
+        "y": 3.4208619486122585
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "waitTime": 0
+    }
+  ],
+  "markers": []
+}

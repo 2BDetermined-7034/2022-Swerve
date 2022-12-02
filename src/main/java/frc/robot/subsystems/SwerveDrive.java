@@ -54,7 +54,7 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule m_backLeftModule;
     private final SwerveModule m_backRightModule;
 
-    private final Field2d m_field = new Field2d();
+    //private final Field2d m_field = new Field2d();
     private final SwerveDrivePoseEstimator m_estimator;
 
     SwerveModuleState[] m_states;
@@ -113,12 +113,12 @@ public class SwerveDrive extends SubsystemBase {
                 VecBuilder.fill(0.1, 0.1, 0.01)); // Vision (x, y, rotation) std-devs
 
         m_states = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0));
-        tab.add("Field", m_field).withSize(4,2).withPosition(4, 0);
+        //tab.add("Field", m_field).withSize(4,2).withPosition(4, 0);
 
-        tab.addNumber("Odometry X", () -> getPosition().getX()).withPosition(0, 5);
-        tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 5);
-        tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 5);
-        tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 5);
+        tab.addNumber("Odometry X", () -> getPosition().getX()).withPosition(0, 4);
+        tab.addNumber("Odometry Y", () -> getPosition().getY()).withPosition(1, 4);
+        tab.addNumber("Odometry Angle", () -> getPosition().getRotation().getDegrees()).withPosition(2, 4);
+        tab.addNumber("Gyroscope Angle", () -> getGyroscopeRotation().getDegrees()).withPosition(3, 4);
     }
 
     public void setPosition(Pose2d m_position) {
@@ -130,7 +130,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void addPath(String name, PathPlannerTrajectory m_trajectory) {
-        m_field.getObject(name).setTrajectory(m_trajectory);
+        //m_field.getObject(name).setTrajectory(m_trajectory);
     }
 
     public Pose2d getPosition() {
@@ -185,7 +185,7 @@ public class SwerveDrive extends SubsystemBase {
         m_estimator.update(getGyroscopeRotation(), m_states[0], m_states[1],
                 m_states[2], m_states[3]);
 
-        m_field.setRobotPose(getPosition());
+        //m_field.setRobotPose(getPosition());
 
         m_frontLeftModule.set(m_states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, m_states[0].angle.getRadians());
         m_frontRightModule.set(m_states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, m_states[1].angle.getRadians());
