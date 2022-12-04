@@ -20,8 +20,8 @@ public class Vision extends SubsystemBase {
     public static PhotonCamera camera = new PhotonCamera(Constants.Camera.camName);
 
     public static final double[][] tagXYZ = { //These are random not accurate
-            {Units.inchesToMeters(300),Units.inchesToMeters(324-72-12), Units.inchesToMeters(30)},
-            {Units.inchesToMeters(300),Units.inchesToMeters(324-72-12-84-12), Units.inchesToMeters(30)}
+            {Units.inchesToMeters(300), Units.inchesToMeters(324-72-12), Units.inchesToMeters(30)},
+            {Units.inchesToMeters(300), Units.inchesToMeters(324-72-12-84-12), Units.inchesToMeters(30)}
     };
 
     public static final HashMap<Integer, Pose3d> targetMap;

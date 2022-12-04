@@ -13,10 +13,6 @@ public final class Constants {
         public static final double DRIVETRAIN_WHEELBASE_METERS = 0.5779;
 
 
-        public static final double xRateLimit = 5;
-        public static final double yRateLimit = 5;
-        public static final double rotRateLimit = 2;
-
         public static final int driveCurrentLimit = 25;
         public static final int rotCurrentLimit = 25;
 
@@ -26,7 +22,7 @@ public final class Constants {
         public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 3;
         public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 13;
         public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 1;
-        public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(266.6);
+        public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(266.6); //266.6
 
         public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 12;
         public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 11;

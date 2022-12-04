@@ -5,7 +5,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -25,9 +24,6 @@ public class RobotContainer {
 
   // Controllers
   private final XboxController m_controller = new XboxController(0);
-  SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(Constants.DriveBase.xRateLimit);
-  SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(Constants.DriveBase.yRateLimit);
-  SlewRateLimiter m_rotspeedLimiter = new SlewRateLimiter(Constants.DriveBase.rotRateLimit);
 
 
   public RobotContainer() {
