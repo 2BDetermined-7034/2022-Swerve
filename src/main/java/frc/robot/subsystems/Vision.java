@@ -62,8 +62,7 @@ public class Vision extends SubsystemBase {
     }
 
     public static boolean getHasTargets() {
-        var result = camera.getLatestResult();
-        return result.hasTargets();
+        return camera.getLatestResult().hasTargets();
 
     }
 
