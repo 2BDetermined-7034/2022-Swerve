@@ -14,6 +14,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import edu.wpi.first.math.geometry.Transform2d;
 
 public class Vision extends SubsystemBase {
 
@@ -40,6 +41,10 @@ public class Vision extends SubsystemBase {
                 new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180))));
     }
 
+    public static final Transform2d camToRobot = new Transform2d();
+
+
+
     /** Creates a new Vision. */
     public Vision() {
 
@@ -57,7 +62,7 @@ public class Vision extends SubsystemBase {
             Transform3d camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
             int targetID = res.getBestTarget().getFiducialId();
             Pose3d camPose = targetMap.get(targetID).transformBy(camToTargetTrans.inverse()); //Can weigh multiple poses later
-            swerveDrive.addVisionMeasurement(camPose.toPose2d(), imageCaptureTime); //transform campose with camToRobot pose2d
+            swerveDrive.addVisionMeasurement(camPose.toPose2d().transformBy(camToRobot), imageCaptureTime); //transform campose with camToRobot pose2d
         }
     }
 
