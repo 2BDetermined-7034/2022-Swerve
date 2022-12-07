@@ -57,7 +57,7 @@ public class Vision extends SubsystemBase {
             Transform3d camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
             int targetID = res.getBestTarget().getFiducialId();
             Pose3d camPose = targetMap.get(targetID).transformBy(camToTargetTrans.inverse()); //Can weigh multiple poses later
-            swerveDrive.addVisionMeasurement(camPose.toPose2d(), imageCaptureTime);
+            swerveDrive.addVisionMeasurement(camPose.toPose2d(), imageCaptureTime); //transform campose with camToRobot pose2d
         }
     }
 
