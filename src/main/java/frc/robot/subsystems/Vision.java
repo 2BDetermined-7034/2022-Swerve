@@ -20,30 +20,11 @@ public class Vision extends SubsystemBase {
 
     public static PhotonCamera camera = new PhotonCamera(Constants.Camera.camName);
 
-    public static final double[][] tagXYZ = { //These are random not accurate
-            {Units.inchesToMeters(300), Units.inchesToMeters(324-72-12), Units.inchesToMeters(30)},
-            {Units.inchesToMeters(300), Units.inchesToMeters(324-72-12-84-12), Units.inchesToMeters(30)}
-    };
 
-    public static final HashMap<Integer, Pose3d> targetMap;
-    /* [FiducialId, 3d(x, y, z, Rotation3d)] */
-    static{
-        targetMap = new HashMap<>();
-        targetMap.put(0, new Pose3d(
-                tagXYZ[0][0],
-                tagXYZ[0][1],
-                tagXYZ[0][2],
-                new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180))));
-        targetMap.put(1, new Pose3d(
-                tagXYZ[1][0],
-                tagXYZ[1][1],
-                tagXYZ[1][2],
-                new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180))));
-    }
+
+
 
     public static final Transform2d camToRobot = new Transform2d();
-
-
 
     /** Creates a new Vision. */
     public Vision() {
@@ -56,12 +37,16 @@ public class Vision extends SubsystemBase {
     }
 
     public static void update(SwerveDrive swerveDrive) {
-        var res = camera.getLatestResult();
-        if(res.hasTargets()) {
-            double imageCaptureTime = Timer.getFPGATimestamp() - res.getLatencyMillis();
+        var res = camera.getLatestResult(); // Retrieves data from camera
+        if(res.hasTargets()) { // Dont remove you will get a nullptr-exception
+
+            double imageCaptureTime = Timer.getFPGATimestamp() - res.getLatencyMillis(); // Vision Pose Measurement Timestamp
+
             Transform3d camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
+
             int targetID = res.getBestTarget().getFiducialId();
-            Pose3d camPose = targetMap.get(targetID).transformBy(camToTargetTrans.inverse()); //Can weigh multiple poses later
+
+            Pose3d camPose = Constants.Field.targetMap.get(targetID).transformBy(camToTargetTrans.inverse()); //Inverts the transform between target and camera
             swerveDrive.addVisionMeasurement(camPose.toPose2d().transformBy(camToRobot), imageCaptureTime); //transform campose with camToRobot pose2d
         }
     }

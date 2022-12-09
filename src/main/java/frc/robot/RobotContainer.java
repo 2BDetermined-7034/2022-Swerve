@@ -14,13 +14,18 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.robot.commands.Auto.SimpleAuto;
 import frc.robot.commands.Drive.DefaultDriveCommand;
 
+import frc.robot.commands.VIsion.VisionCommand;
 import frc.robot.subsystems.*;
 
 
 public class RobotContainer {
   ShuffleboardTab tab = Shuffleboard.getTab("Match");
   private final SwerveDrive m_drivetrainSubsystem = new SwerveDrive();
+
+  private final Vision m_vision = new Vision();
   SendableChooser<Command> m_autoSelector;
+
+  VisionCommand visionCommand = new VisionCommand(m_vision, m_drivetrainSubsystem);
 
   // Controllers
   private final XboxController m_controller = new XboxController(0);
@@ -39,6 +44,8 @@ public class RobotContainer {
             () -> -square(modifyAxis(m_controller.getLeftX()) * SwerveDrive.MAX_VELOCITY_METERS_PER_SECOND),
             () -> -square(modifyAxis(m_controller.getRightX()) * SwerveDrive.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND)
     ));
+
+    m_vision.setDefaultCommand(visionCommand);
 
 
     tab.add("Auto", m_autoSelector);

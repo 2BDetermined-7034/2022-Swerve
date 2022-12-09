@@ -184,9 +184,6 @@ public class SwerveDrive extends SubsystemBase {
 
         m_estimator.update(getGyroscopeRotation(), m_states[0], m_states[1],
                 m_states[2], m_states[3]);
-        if(Vision.getHasTargets()) {
-            Vision.update(this);
-        }
         
         
 

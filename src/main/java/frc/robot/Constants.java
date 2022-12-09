@@ -4,6 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.util.Units;
+
+import java.util.HashMap;
+
 public final class Constants {
 
     public static final class DriveBase {
@@ -49,6 +55,23 @@ public final class Constants {
 
     public static final class Camera {
         public static final String camName = "idk";
+    }
+
+    public static final class Field {
+        public static final HashMap<Integer, Pose3d> targetMap;
+        static{
+            targetMap = new HashMap<>();
+            targetMap.put(0 /* Fiducial ID */, new Pose3d( // Tag Pose Specify in Meters
+                    0,
+                    0,
+                    0,
+                    new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180))));
+            targetMap.put(1, new Pose3d(
+                    0,
+                    0,
+                    0,
+                    new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180))));
+        }
     }
 
 }
