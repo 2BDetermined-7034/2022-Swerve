@@ -46,7 +46,7 @@ public class Vision extends SubsystemBase {
 
             int targetID = res.getBestTarget().getFiducialId();
 
-            Pose3d camPose = Constants.Field.targetMap.get(targetID).transformBy(camToTargetTrans.inverse()); //Inverts the transform between target and camera
+            Pose3d camPose = getTargetPose(targetID).transformBy(camToTargetTrans.inverse()); //Inverts the transform between target and camera
             swerveDrive.addVisionMeasurement(camPose.toPose2d().transformBy(camToRobot), imageCaptureTime); //transform campose with camToRobot pose2d
         }
     }
@@ -54,6 +54,11 @@ public class Vision extends SubsystemBase {
     public static boolean getHasTargets() {
         return camera.getLatestResult().hasTargets();
 
+    }
+    
+    public static Pose3d getTargetPose(int fiducialID) {
+        return Constants.Field.targetMap.get(fiducialID);
+        
     }
 
 }
