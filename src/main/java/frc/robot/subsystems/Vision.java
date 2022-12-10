@@ -4,25 +4,20 @@
 
 package frc.robot.subsystems;
 
-import java.util.HashMap;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Transform2d;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision extends SubsystemBase {
 
     public static PhotonCamera camera = new PhotonCamera(Constants.Camera.camName);
-
-
-
-
 
     public static final Transform2d camToRobot = new Transform2d();
 
@@ -36,29 +31,58 @@ public class Vision extends SubsystemBase {
         // This method will be called once per scheduler run
     }
 
-    public static void update(SwerveDrive swerveDrive) {
-        var res = camera.getLatestResult(); // Retrieves data from camera
-        if(res.hasTargets()) { // Dont remove you will get a nullptr-exception
+    /**
+     * Method to update a swerve drives position with a fiducial reading
+     * @param swerveDrive drive with pose estimator
+     */
+    public void updateSwervePos(SwerveDrive swerveDrive) {
+        PhotonPipelineResult res = camera.getLatestResult();
+        Pose3d camPose = getPoseFromBest();
+        swerveDrive.addVisionMeasurement(camPose.toPose2d().transformBy(camToRobot), getTimestamp(res)); //transform compose with camToRobot pose2d
+    }
 
-            double imageCaptureTime = Timer.getFPGATimestamp() - res.getLatencyMillis(); // Vision Pose Measurement Timestamp
-
+    /**
+     * Gets the position of the Camera from the best identified fiducial
+     * @return pose3d
+     */
+    public Pose3d getPoseFromBest(){
+       PhotonPipelineResult res = camera.getLatestResult(); // Retrieves data from camera
+        int targetID = getTargetID(res);
+        SmartDashboard.putNumber("ID", targetID);
+        if (targetID != -1) {
             Transform3d camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
 
-            int targetID = res.getBestTarget().getFiducialId();
+            SmartDashboard.putNumber("transform x", camToTargetTrans.getX());
+            SmartDashboard.putNumber("transform y", camToTargetTrans.getY());
+            SmartDashboard.putNumber("transform t", camToTargetTrans.getRotation().toRotation2d().getDegrees());
 
-            Pose3d camPose = getTargetPose(targetID).transformBy(camToTargetTrans.inverse()); //Inverts the transform between target and camera
-            swerveDrive.addVisionMeasurement(camPose.toPose2d().transformBy(camToRobot), imageCaptureTime); //transform campose with camToRobot pose2d
+            //TODO: Fix this to get pose
+            return getFiducialPose(targetID).transformBy(camToTargetTrans); //Inverts the transform between target and camera
         }
+       return null;
     }
 
-    public static boolean getHasTargets() {
-        return camera.getLatestResult().hasTargets();
-
+    /**
+     * Get best targetID from the camera
+     * @param res camera post processed results
+     * @return ID of best fiducial
+     */
+    public int getTargetID(PhotonPipelineResult res) {
+        if (res.hasTargets()) { // Dont remove you will get a nullptr-exception
+            return res.getBestTarget().getFiducialId();
+        }
+        return -1;
     }
-    
-    public static Pose3d getTargetPose(int fiducialID) {
+
+    /**
+     * Gets timestamp of measurement
+     * @param res camera post processed results
+     * @return timestamp adjusted for latency
+     */
+    public double getTimestamp(PhotonPipelineResult res) {
+        return Timer.getFPGATimestamp() - res.getLatencyMillis();
+    }
+    public Pose3d getFiducialPose(int fiducialID) {
         return Constants.Field.targetMap.get(fiducialID);
-        
     }
-
 }

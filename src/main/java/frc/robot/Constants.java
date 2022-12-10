@@ -13,7 +13,7 @@ import java.util.HashMap;
 public final class Constants {
 
     public static final class DriveBase {
-        public static final double MAX_VOLTAGE = 12.0;
+        public static final double MAX_VOLTAGE = 6.0;
 
         public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.5779;//0.71;
         public static final double DRIVETRAIN_WHEELBASE_METERS = 0.5779;
@@ -54,18 +54,25 @@ public final class Constants {
     }
 
     public static final class Camera {
-        public static final String camName = "idk";
+        public static final String camName = "PiCam";
+    }
+    public static final class Vision {
+        public static final double kPRotate = 0;
+
+
     }
 
     public static final class Field {
         public static final HashMap<Integer, Pose3d> targetMap;
         static{
             targetMap = new HashMap<>();
-            targetMap.put(0 /* Fiducial ID */, new Pose3d( // Tag Pose Specify in Meters
+            targetMap.put(0 /* Fiducial ID */,
+                    new Pose3d(
                     0,
                     0,
                     0,
                     new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180))));
+
             targetMap.put(1, new Pose3d(
                     0,
                     0,

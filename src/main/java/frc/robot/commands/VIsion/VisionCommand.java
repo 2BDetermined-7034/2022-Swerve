@@ -6,17 +6,19 @@ import frc.robot.subsystems.Vision;
 
 public class VisionCommand extends CommandBase {
     private final SwerveDrive swerveDrive;
+    private final Vision vision;
 
     public VisionCommand(Vision m_vision, SwerveDrive m_swerveDrive) {
 
         this.swerveDrive = m_swerveDrive;
+        this.vision = m_vision;
 
         addRequirements(m_swerveDrive, m_vision);
     }
 
     @Override
     public void execute() {
-        Vision.update(swerveDrive);
+        vision.updateSwervePos(swerveDrive);
     }
 
     @Override
