@@ -43,6 +43,72 @@
               "_source0": "network_table:///SmartDashboard/PPSwerveControllerCommand_rotationError",
               "_title": "PPSwerveControllerCommand_rotationError"
             }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ID",
+              "_title": "ID"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/april tag angle",
+              "_title": "april tag angle"
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/april tag x",
+              "_title": "april tag x"
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/transform x",
+              "_title": "transform x"
+            }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/transform y",
+              "_title": "transform y"
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/transform t",
+              "_title": "transform t"
+            }
           }
         }
       }
@@ -122,6 +188,11 @@
                   "_type": "PID Controller",
                   "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[9]",
                   "_title": "PIDController[9]"
+                },
+                {
+                  "_type": "PID Controller",
+                  "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[10]",
+                  "_title": "PIDController[10]"
                 }
               ]
             }
@@ -135,6 +206,19 @@
               "_type": "Subsystem Layout",
               "_source0": "network_table:///LiveWindow/SwerveDrive",
               "_title": "SwerveDrive",
+              "Layout/Label position": "BOTTOM",
+              "_children": []
+            }
+          },
+          "4,0": {
+            "size": [
+              2,
+              4
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_source0": "network_table:///LiveWindow/Vision",
+              "_title": "Vision",
               "Layout/Label position": "BOTTOM",
               "_children": []
             }

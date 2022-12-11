@@ -13,7 +13,7 @@ import java.util.HashMap;
 public final class Constants {
 
     public static final class DriveBase {
-        public static final double MAX_VOLTAGE = 6.0;
+        public static final double MAX_VOLTAGE = 12.0;
 
         public static final double DRIVETRAIN_TRACKWIDTH_METERS = 0.5779;//0.71;
         public static final double DRIVETRAIN_WHEELBASE_METERS = 0.5779;
@@ -28,7 +28,7 @@ public final class Constants {
         public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 3;
         public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 13;
         public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 1;
-        public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(266.6); //266.6
+        public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(263.1); //266.6
 
         public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 12;
         public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 11;
@@ -43,7 +43,7 @@ public final class Constants {
         public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 2;
         public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 6;
         public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 3;
-        public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(265.5);
+        public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(266.5);
     }
 
     public static final class Auto {
@@ -51,6 +51,13 @@ public final class Constants {
         public static final double kV = 2.64;
         public static final double kA = 0.38134;
         public static final double kP = 0; //3.4557;
+
+        public static final class PathConstraints {
+            public static final double mV = 2;
+            public static final double mA = 4;
+        }
+
+
     }
 
     public static final class Camera {

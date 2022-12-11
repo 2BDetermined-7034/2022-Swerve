@@ -11,11 +11,10 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Button;
-import frc.robot.commands.Auto.SimpleAuto;
+import frc.robot.commands.Auto.AutoFactory;
 import frc.robot.commands.Drive.DefaultDriveCommand;
 
 import frc.robot.commands.VIsion.AutoLock;
-import frc.robot.commands.VIsion.VisionCommand;
 import frc.robot.subsystems.*;
 
 
@@ -35,10 +34,11 @@ public class RobotContainer {
 
   public RobotContainer() {
     m_autoSelector = new SendableChooser<>();
-    m_autoSelector.setDefaultOption("test auto", SimpleAuto.getAuto(m_drivetrainSubsystem));
-    m_autoSelector.addOption("spin auto", SimpleAuto.getSpinAuto(m_drivetrainSubsystem));
-    m_autoSelector.addOption("square auto", SimpleAuto.getSquareAuto(m_drivetrainSubsystem));
-
+    m_autoSelector.setDefaultOption("test auto", AutoFactory.getAuto(m_drivetrainSubsystem));
+    m_autoSelector.addOption("spin auto", AutoFactory.getSpinAuto(m_drivetrainSubsystem));
+    m_autoSelector.addOption("square auto", AutoFactory.getSquareAuto(m_drivetrainSubsystem));
+    m_autoSelector.addOption("Small square auto", AutoFactory.getSmallSquare(m_drivetrainSubsystem));
+    m_autoSelector.addOption("Small square spin auto", AutoFactory.getSmallSquareSpin(m_drivetrainSubsystem));
 
     m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(
             m_drivetrainSubsystem,
