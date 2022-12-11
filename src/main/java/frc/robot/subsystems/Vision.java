@@ -56,8 +56,8 @@ public class Vision extends SubsystemBase {
             SmartDashboard.putNumber("transform y", camToTargetTrans.getY());
             SmartDashboard.putNumber("transform t", camToTargetTrans.getRotation().toRotation2d().getDegrees());
 
-            //TODO: Fixed by inverting transform
-            return getFiducialPose(targetID).transformBy(camToTargetTrans.inverse()); //Inverts the transform between FiducialPose and Camera to get CameraPose
+            //TODO: Fix this to get pose
+            return getFiducialPose(targetID).transformBy(camToTargetTrans); //Inverts the transform between target and camera
         }
        return null;
     }
