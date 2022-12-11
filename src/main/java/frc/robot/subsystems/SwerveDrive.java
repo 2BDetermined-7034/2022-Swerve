@@ -23,10 +23,9 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.DriveBase.*;
-import frc.robot.Constants.Modules.*;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -108,7 +107,7 @@ public class SwerveDrive extends SubsystemBase {
         m_estimator = new SwerveDrivePoseEstimator(getGyroscopeRotation(), new Pose2d(), getKinematics(),
                 VecBuilder.fill(0.02, 0.02, 0.01), // estimator values (x, y, rotation) std-devs
                 VecBuilder.fill(0.01), // Gyroscope rotation std-dev
-                VecBuilder.fill(0.1, 0.1, 0.01)); // Vision (x, y, rotation) std-devs
+                VecBuilder.fill(0.15, 0.15, 0.01)); // Vision (x, y, rotation) std-devs
 
         m_states = m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0, 0, 0));
         //tab.add("Field", m_field).withSize(4,2).withPosition(4, 0);
@@ -185,6 +184,8 @@ public class SwerveDrive extends SubsystemBase {
         m_estimator.update(getGyroscopeRotation(), m_states[0], m_states[1],
                 m_states[2], m_states[3]);
 
+        Pose2d robotPose = getRobotPose(); //TODO Check if Pose is Accurate
+
 
         //m_field.setRobotPose(getPosition());
 
@@ -194,4 +195,14 @@ public class SwerveDrive extends SubsystemBase {
         m_backRightModule.set(m_states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * Constants.DriveBase.MAX_VOLTAGE, m_states[3].angle.getRadians());
 
     }
+
+    public Pose2d getRobotPose() {
+        Pose2d robotPose = m_estimator.getEstimatedPosition();
+        SmartDashboard.putNumber("poseEstimator x: ", robotPose.getX());
+        SmartDashboard.putNumber("poseEstimator y: ", robotPose.getY());
+        SmartDashboard.putNumber("poseEstimator t: ", robotPose.getRotation().getDegrees());
+        return robotPose;
+    }
+
+
 }

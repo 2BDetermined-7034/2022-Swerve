@@ -4,15 +4,14 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.photonvision.PhotonCamera;
-
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import edu.wpi.first.math.geometry.Transform2d;
+import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision extends SubsystemBase {
@@ -38,7 +37,9 @@ public class Vision extends SubsystemBase {
     public void updateSwervePos(SwerveDrive swerveDrive) {
         PhotonPipelineResult res = camera.getLatestResult();
         Pose3d camPose = getPoseFromBest();
-        swerveDrive.addVisionMeasurement(camPose.toPose2d().transformBy(camToRobot), getTimestamp(res)); //transform compose with camToRobot pose2d
+        if(camPose != null) {
+            swerveDrive.addVisionMeasurement(camPose.toPose2d().transformBy(camToRobot), getTimestamp(res)); //transform compose with camToRobot pose2d
+        }
     }
 
     /**
@@ -57,7 +58,15 @@ public class Vision extends SubsystemBase {
             SmartDashboard.putNumber("transform t", camToTargetTrans.getRotation().toRotation2d().getDegrees());
 
             //TODO: Fix this to get pose
-            return getFiducialPose(targetID).transformBy(camToTargetTrans); //Inverts the transform between target and camera
+            Pose3d camPose = getFiducialPose(targetID).transformBy(camToTargetTrans.inverse());
+
+            SmartDashboard.putNumber("camPose x", camPose.getX()); // temp
+            SmartDashboard.putNumber("camPose y", camPose.getY());
+            SmartDashboard.putNumber("camPose z", camPose.getZ());
+            SmartDashboard.putNumber("camPose rot", camPose.getRotation().toRotation2d().getDegrees());
+
+
+            return camPose;
         }
        return null;
     }
@@ -68,7 +77,7 @@ public class Vision extends SubsystemBase {
      * @return ID of best fiducial
      */
     public int getTargetID(PhotonPipelineResult res) {
-        if (res.hasTargets()) { // Dont remove you will get a nullptr-exception
+        if(res.hasTargets()) { // Dont remove you will get a nullptr-exception
             return res.getBestTarget().getFiducialId();
         }
         return -1;
@@ -85,4 +94,6 @@ public class Vision extends SubsystemBase {
     public Pose3d getFiducialPose(int fiducialID) {
         return Constants.Field.targetMap.get(fiducialID);
     }
+
+
 }
