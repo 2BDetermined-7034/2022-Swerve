@@ -62,6 +62,8 @@ public final class Constants {
 
     public static final class Camera {
         public static final String camName = "PiCam";
+        public static final double camHeightOffGround = 0.85;
+        public static final double cameraPitch = 15.0;
     }
     public static final class Vision {
         public static final double kPRotate = 0;

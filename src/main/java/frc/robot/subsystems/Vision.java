@@ -4,14 +4,16 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 public class Vision extends SubsystemBase {
@@ -36,9 +38,9 @@ public class Vision extends SubsystemBase {
      */
     public void updateSwervePos(SwerveDrive swerveDrive) {
         PhotonPipelineResult res = camera.getLatestResult();
-        Pose3d camPose = getPoseFromBest();
+        Pose2d camPose = getPoseFromBest();
         if(camPose != null) {
-            swerveDrive.addVisionMeasurement(camPose.toPose2d().transformBy(camToRobot), getTimestamp(res)); //transform compose with camToRobot pose2d
+            swerveDrive.addVisionMeasurement(camPose.transformBy(camToRobot), getTimestamp(res)); //transform compose with camToRobot pose2d
         }
     }
 
@@ -46,27 +48,20 @@ public class Vision extends SubsystemBase {
      * Gets the position of the Camera from the best identified fiducial
      * @return pose3d
      */
-    public Pose3d getPoseFromBest(){
+    public Pose2d getPoseFromBest(){
        PhotonPipelineResult res = camera.getLatestResult(); // Retrieves data from camera
         int targetID = getTargetID(res);
         SmartDashboard.putNumber("ID", targetID);
         if (targetID != -1) {
-            Transform3d camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
+            Pose3d targetPose = getFiducialPose(targetID);
+            var axis = targetPose.getRotation().getAxis();
+            return PhotonUtils.estimateFieldToRobot(
+                    Constants.Camera.camHeightOffGround, targetPose.getZ(),
+                    Constants.Camera.cameraPitch, Math.asin(-axis.get(2,1)),
+                    Rotation2d.fromDegrees(Math.atan2(axis.get(1, 1), axis.get(3, 1))),
+                    SwerveDrive.getGyroscopeRotation(), targetPose.toPose2d(), camToRobot
+                    );
 
-            SmartDashboard.putNumber("transform x", camToTargetTrans.getX());
-            SmartDashboard.putNumber("transform y", camToTargetTrans.getY());
-            SmartDashboard.putNumber("transform t", camToTargetTrans.getRotation().toRotation2d().getDegrees());
-
-            //TODO: Fix this to get pose
-            Pose3d camPose = getFiducialPose(targetID).transformBy(camToTargetTrans.inverse());
-
-            SmartDashboard.putNumber("camPose x", camPose.getX()); // temp
-            SmartDashboard.putNumber("camPose y", camPose.getY());
-            SmartDashboard.putNumber("camPose z", camPose.getZ());
-            SmartDashboard.putNumber("camPose rot", camPose.getRotation().toRotation2d().getDegrees());
-
-
-            return camPose;
         }
        return null;
     }

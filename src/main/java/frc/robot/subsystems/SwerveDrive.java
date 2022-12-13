@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -44,7 +43,7 @@ public class SwerveDrive extends SubsystemBase {
             new Translation2d(-Constants.DriveBase.DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -Constants.DriveBase.DRIVETRAIN_WHEELBASE_METERS / 2.0)
     );
 
-    private final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200);
+    private static final AHRS m_navx = new AHRS(SPI.Port.kMXP, (byte) 200);
 
     private final SwerveModule m_frontLeftModule;
     private final SwerveModule m_frontRightModule;
@@ -156,7 +155,7 @@ public class SwerveDrive extends SubsystemBase {
       m_navx.zeroYaw();
     }
 
-    public Rotation2d getGyroscopeRotation() {
+    public static Rotation2d getGyroscopeRotation() {
         if (m_navx.isMagnetometerCalibrated()) {
         // We will only get valid fused headings if the magnetometer is calibrated
             return Rotation2d.fromDegrees(m_navx.getFusedHeading());
@@ -184,7 +183,7 @@ public class SwerveDrive extends SubsystemBase {
         m_estimator.update(getGyroscopeRotation(), m_states[0], m_states[1],
                 m_states[2], m_states[3]);
 
-        Pose2d robotPose = getRobotPose(); //TODO Check if Pose is Accurate
+        Pose2d robotPose = getPosition();
 
 
         //m_field.setRobotPose(getPosition());
@@ -196,13 +195,6 @@ public class SwerveDrive extends SubsystemBase {
 
     }
 
-    public Pose2d getRobotPose() {
-        Pose2d robotPose = m_estimator.getEstimatedPosition();
-        SmartDashboard.putNumber("poseEstimator x: ", robotPose.getX());
-        SmartDashboard.putNumber("poseEstimator y: ", robotPose.getY());
-        SmartDashboard.putNumber("poseEstimator t: ", robotPose.getRotation().getDegrees());
-        return robotPose;
-    }
 
 
 }
