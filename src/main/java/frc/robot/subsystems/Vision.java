@@ -15,6 +15,7 @@ import frc.robot.Constants;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class Vision extends SubsystemBase {
 
@@ -53,12 +54,24 @@ public class Vision extends SubsystemBase {
         int targetID = getTargetID(res);
         SmartDashboard.putNumber("ID", targetID);
         if (targetID != -1) {
+            PhotonTrackedTarget measuredTarget = res.getBestTarget();
             Pose3d targetPose = getFiducialPose(targetID);
-            var axis = targetPose.getRotation().getAxis();
+
+            /*
+              cameraHeightMeters – The physical height of the camera off the floor in meters.
+              targetHeightMeters – The physical height of the target off the floor in meters. This should be the height of whatever is being targeted (i.e. if the targeting region is set to top, this should be the height of the top of the target).
+              cameraPitchRadians – The pitch of the camera from the horizontal plane in radians. Positive values up.
+              targetPitchRadians – The pitch of the target in the camera's lens in radians. Positive values up.
+              targetYaw – The observed yaw of the target. Note that this *must* be CCW-positive, and Photon returns CW-positive.
+              gyroAngle – The current robot gyro angle, likely from odometry.
+              fieldToTarget – A Pose2d representing the target position in the field coordinate system.
+              cameraToRobot – The position of the robot relative to the camera. If the camera was mounted 3 inches behind the "origin" (usually physical center) of the robot, this would be Transform2d(3 inches, 0 inches, 0 degrees).
+             */
+
             return PhotonUtils.estimateFieldToRobot( //I'll comment later ChatGPT wrote this not my fault
                     Constants.Camera.camHeightOffGround, targetPose.getZ(),
-                    Constants.Camera.cameraPitch, Math.asin(-axis.get(2,1)),
-                    Rotation2d.fromDegrees(Math.atan2(axis.get(1, 1), axis.get(3, 1))),
+                    Constants.Camera.cameraPitch, measuredTarget.getPitch(),
+                    Rotation2d.fromDegrees(-measuredTarget.getYaw()),
                     SwerveDrive.getGyroscopeRotation(), targetPose.toPose2d(), camToRobot
                     );
 
